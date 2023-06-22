@@ -1,14 +1,16 @@
+import { MESSAGES } from './messages.js';
+
 let user;
 const prefix = '--username=';
 
 export function greetUser() {
   if (!user) { setUser(); }
-  console.log(`Welcome to the File Manager, ${user}!`);
+  console.log(MESSAGES.greet(user));
 }
 
 export function farewellUser() {
   if (!user) { setUser(); }
-  console.log(`Thank you for using File Manager, ${user}, goodbye!`);
+  console.log(MESSAGES.farewell(user));
 }
 
 function setUser() {
