@@ -19,10 +19,6 @@ export function handleOS(line) {
   }
 }
 
-export function showHomeDir() {
-  console.log((`You are currently in ${os.homedir()}`));
-}
-
 function showCpus() {
   console.log('Overall amount: ', os.cpus().length);
   os.cpus().forEach(({ model, speed }) => {
