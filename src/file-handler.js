@@ -11,21 +11,24 @@ export async function isFile(fileName) {
 }
 
 export async function openFile(fileName) {
-  const res = await readFile(fileName);
-  console.log(res);
+  try {
+    const res = await readFile(fileName);
+    console.log(res);
+  } catch (err) {
+    console.log(err);
+  }
 }
 
 export async function readFile(fileName) {
   const filePath = join(process.cwd(), fileName);
-
   const rs = createReadStream(filePath);
 
-  return new Promise(res => {
+  return new Promise((res, rej) => {
     let data = '';
     rs.on('data', chunk => data += chunk);
 
     rs.on('error', () => {
-      res(MESSAGES.operationFailed);
+      rej(MESSAGES.operationFailed);
     });
 
     rs.on('end', () => {
