@@ -11,6 +11,7 @@ import {
   copyFile,
 } from './file-handler.js';
 import { calculateHash } from './hash.js';
+import { compress } from './zip.js';
 
 function main() {
   const rl = createInterface({
@@ -55,6 +56,10 @@ function main() {
       case /^mv\s/.test(line): await copyFile(line.substring(3), true);
         break;
       case /^hash\s/.test(line): await calculateHash(line.substring(5), true);
+        break;
+      case /^compress\s/.test(line): await compress(line.substring(9));
+        break;
+      case /^decompress\s/.test(line): await compress(line.substring(11), true);
         break;
       default: console.log(MESSAGES.invalidCommand);
     }
