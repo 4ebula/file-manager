@@ -14,14 +14,14 @@ export async function isFile(fileName) {
 
 export async function openFile(fileName) {
   try {
-    const res = await readFile(fileName);
+    const res = await readFileContent(fileName);
     console.log(res);
   } catch (err) {
     console.log(err);
   }
 }
 
-export async function readFile(fileName) {
+export async function readFileContent(fileName) {
   const filePath = join(process.cwd(), fileName);
   const rs = createReadStream(filePath);
 
@@ -86,7 +86,7 @@ export async function copyFile(names, deleteOld = false) {
   const [source, dest] = splitedNames;
 
   try {
-    await readFile(dest);
+    await readFileContent(dest);
     isDestExist = true;
   } catch {
     isDestExist = false;

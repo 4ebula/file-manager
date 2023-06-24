@@ -3,7 +3,7 @@ import { createReadStream, createWriteStream } from 'node:fs';
 import { pipeline } from 'node:stream/promises';
 import { splitNames } from './utils.js';
 import { MESSAGES } from './messages.js';
-import { deleteFile, readFile } from './file-handler.js';
+import { deleteFile, readFileContent } from './file-handler.js';
 
 export async function compress(names, decompress = false) {
   let isDestExist = false;
@@ -17,7 +17,7 @@ export async function compress(names, decompress = false) {
   const [source, dest] = splitedNames;
 
   try {
-    await readFile(dest);
+    await readFileContent(dest);
     isDestExist = true;
   } catch {
     isDestExist = false;

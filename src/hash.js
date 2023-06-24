@@ -1,9 +1,9 @@
 import { createHash } from 'node:crypto';
-import { readFile } from './file-handler.js';
+import { readFileContent } from './file-handler.js';
 
 export async function calculateHash(filename) {
   try {
-    const fileContent = await readFile(filename);
+    const fileContent = await readFileContent(filename);
     const hash = createHash('sha256')
       .update(fileContent)
       .digest('hex');
