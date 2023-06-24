@@ -74,6 +74,7 @@ export async function deleteFile(fileName) {
 
 export async function copyFile(names, deleteOld = false) {
   const splitedNames = splitNames(names);
+  let isFileCopied = false;
 
   if (!splitedNames) {
     console.log(MESSAGES.operationFailed);
@@ -84,11 +85,13 @@ export async function copyFile(names, deleteOld = false) {
 
   try {
     await fsPromises.copyFile(oldName, newName);
+    isFileCopied = true;
   } catch {
+    isFileCopied = false;
     console.log(MESSAGES.operationFailed);
   }
 
-  if (deleteOld) {
+  if (deleteOld && isFileCopied) {
     deleteFile(oldName);
   }
 }
