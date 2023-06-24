@@ -1,7 +1,8 @@
-import { createReadStream } from 'node:fs';
+import { createReadStream, createWriteStream } from 'node:fs';
 import fsPromises from 'node:fs/promises';
 import { join } from 'node:path';
 import process from 'node:process';
+import { pipeline } from 'node:stream/promises';
 import { splitNames } from './utils.js';
 import { MESSAGES } from './messages.js';
 
@@ -75,23 +76,37 @@ export async function deleteFile(fileName) {
 export async function copyFile(names, deleteOld = false) {
   const splitedNames = splitNames(names);
   let isFileCopied = false;
+  let isDestExist = false;
 
   if (!splitedNames) {
     console.log(MESSAGES.operationFailed);
     return;
   }
 
-  const [oldName, newName] = splitedNames;
+  const [source, dest] = splitedNames;
 
   try {
-    await fsPromises.copyFile(oldName, newName);
+    await readFile(dest);
+    isDestExist = true;
+  } catch {
+    isDestExist = false;
+  }
+
+  const rs = createReadStream(source);
+  const ws = createWriteStream(dest);
+
+  try {
+    await pipeline(rs, ws);
     isFileCopied = true;
   } catch {
     isFileCopied = false;
     console.log(MESSAGES.operationFailed);
+    if (!isDestExist) {
+      deleteFile(dest);
+    }
   }
 
   if (deleteOld && isFileCopied) {
-    deleteFile(oldName);
+    deleteFile(source);
   }
 }
